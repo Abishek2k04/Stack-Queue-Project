@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Queue Project</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Oswald&display=swap');
+        body {
+    font-family: Arial, sans-serif;
+    background-color: #000000;
+}
+
+.container {
+    text-align: center;
+    margin-top: 50px;
+    color: red;
+    font-family: 'Oswald', sans-serif;
+}
+
+.queue {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    height: 100px;
+}
+
+.queue-box {
+    width: 100px;
+    height: 50px;
+    background-color: #ff0000;
+    color: rgb(0, 0, 0);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
+    animation-duration: 0.5s;
+    animation-timing-function: ease-in-out;
+    animation-fill-mode: both;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeOut {
+    0% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 18px;
+    margin: 10px;
+    cursor: pointer;
+    color: rgb(0, 0, 0);
+}
+
+input {
+    padding: 10px;
+    font-size: 16px;
+    margin: 10px;
+    color: #000000;
+}
+
+#arrowBox {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px
+}
+
+#arrow {
+    width: 20px;
+    height: 20px;
+    border: 2px solid #ff0000;
+    border-width: 0 2px 2px 0;
+    transform: rotate(-45deg);
+   
+}
+
+#frontElement {
+    font-size: 16px;
+    color: white;
+}
+#enqueueBtn{
+    font-family: 'Oswald', sans-serif;
+}
+#dequeueBtn{
+    font-family: 'Oswald', sans-serif;
+}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Queue Project</h1>
+     <div class="lop"><input type="text" id="inputItem" placeholder="Enter item"></div>
+        <button id="enqueueBtn">EnQueue</button>
+        <button id="dequeueBtn">DeQueue</button>
+        <div class="queue">
+        </div>
+        <div id="arrowBox">
+            <div id="arrow"></div>
+            <div id="frontElement">Front Element</div>
+        </div>
+    </div>
+    <script>
+const queue = [];
+let boxIndex = 0;
+
+document.getElementById("enqueueBtn").addEventListener("click", function () {
+    const inputItem = document.getElementById("inputItem");
+    const newItem = inputItem.value.trim();
+
+    if (newItem !== "") {
+        queue.push(newItem);
+
+        const newBox = document.createElement("div");
+        newBox.className = "queue-box";
+        newBox.innerText = newItem;
+        newBox.style.animation = `fadeIn 0.5s`;
+        newBox.id = `box${++boxIndex}`;
+
+        document.querySelector(".queue").appendChild(newBox);
+        inputItem.value = ""; // Clear the input field
+
+        updateFrontElement();
+    }
+});
+
+document.getElementById("dequeueBtn").addEventListener("click", function () {
+    if (queue.length === 0) return;
+
+    
+    const removedBox = document.querySelector(".queue-box");
+    removedBox.style.animation = `fadeOut 0.5s`;
+
+    setTimeout(() => {
+        removedBox.remove();
+        queue.shift(); // Remove item from the front
+        updateFrontElement();
+        boxIndex--;
+    }, 500);
+});
+
+function updateFrontElement() {
+    const frontElement = queue.length > 0 ? queue[0] : "Empty Queue";
+    document.getElementById("frontElement").innerText = `Front Element: ${frontElement}`;
+}
+
+    </script>
+</body>
+</html>
